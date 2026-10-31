@@ -56,3 +56,7 @@ Verificación de esta sección: TypeScript correcto, compilación de producción
 ### Datos del borrador
 
 El flujo ahora exige nombre y celular colombiano (10 dígitos comenzando por 3). Al elegir domicilio también exige dirección y barrio. La validación nativa del navegador impide revisar formularios incompletos; los cambios invalidan el resumen anterior. El resumen incluye los datos ingresados y ofrece volver a editarlos. Usar datos ficticios al probar: los datos quedan en memoria de la pestaña y se incluyen en el TXT descargado, sin enviarse al restaurante ni guardarse en el servidor.
+
+### Carritos por sede y búsqueda
+
+Cada sede conserva su carrito independiente durante la sesión. Cambiar de restaurante ya no traslada productos al otro carrito. Se añadió búsqueda por nombre combinada con categorías, resultados vacíos con recuperación y vaciado del carrito de la sede activa. Los datos del cliente permanecen en memoria y no se transmiten.
