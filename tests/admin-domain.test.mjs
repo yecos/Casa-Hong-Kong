@@ -1,0 +1,17 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
+import { requestSchema,priceOrder,allowedTransitions,isAllowedAdmin } from '../lib/order-domain.ts';
+import { seedDishes } from '../app/menu.ts';
+import { deliveryRules } from '../app/order-config.ts';
+const rules={...deliveryRules,acceptingRequests:true,pauseMessage:'Pausado'};
+const menu=seedDishes.map(d=>({...d,available:true}));
+const input=()=>({idempotencyKey:randomUUID(),branch:'casa',method:'domicilio',cart:[{id:'especial:Mini',quantity:1}],customer:{name:'Prueba técnica',phone:'3000000000',address:'Dirección de prueba 123',neighborhood:'Calasanz'},notes:'',consent:true,expectedTotal:31000});
+test('server computes products and fee from trusted menu',()=>{const p=priceOrder(requestSchema.parse(input()),menu,rules);assert.equal(p.subtotal,25000);assert.equal(p.total,31000);});
+test('client cannot choose a lower total or use a stale price',()=>{assert.throws(()=>priceOrder({...input(),expectedTotal:1},menu,rules),/precios cambiaron/);const changed=menu.map(d=>d.id==='especial'?{...d,variants:{...d.variants,Mini:30000}}:d);assert.throws(()=>priceOrder(input(),changed,rules),/precios cambiaron/);});
+test('sold-out product and paused requests are rejected server-side',()=>{assert.throws(()=>priceOrder(input(),menu.map(d=>({...d,available:false})),rules),/no está disponible/);assert.throws(()=>priceOrder(input(),menu,{...rules,acceptingRequests:false}),/Pausado/);});
+test('input validation enforces quantities, consent and delivery address',()=>{for(const quantity of [0,21,1.5])assert.equal(requestSchema.safeParse({...input(),cart:[{id:'especial:Mini',quantity}]}).success,false);assert.equal(requestSchema.safeParse({...input(),consent:false}).success,false);assert.equal(requestSchema.safeParse({...input(),customer:{...input().customer,address:''}}).success,false);});
+test('duplicate variants are rejected',()=>{const value=input();value.cart.push(value.cart[0]);assert.equal(requestSchema.safeParse(value).success,false);});
+test('minimum excludes fee; pickup skips delivery minimum',()=>{const v={...input(),cart:[{id:'lumpias',quantity:1}],expectedTotal:19000};assert.throws(()=>priceOrder(v,menu,rules),/mínimo/);assert.equal(priceOrder({...v,method:'recoger',expectedTotal:13000},menu,rules).total,13000);});
+test('admin requires a verified email in the allowlist',()=>{assert.equal(isAllowedAdmin({email:'owner@example.com',emailVerified:false},'owner@example.com'),false);assert.equal(isAllowedAdmin({email:'stranger@example.com',emailVerified:true},'owner@example.com'),false);assert.equal(isAllowedAdmin({email:'OWNER@example.com',emailVerified:true},'owner@example.com'),true);assert.equal(isAllowedAdmin(undefined,''),false);});
+test('order transitions cannot skip confirmation or reopen terminal orders',()=>{assert.deepEqual(allowedTransitions('pendiente','domicilio'),['confirmado','cancelado']);assert.equal(allowedTransitions('listo','recoger').includes('en_camino'),false);assert.deepEqual(allowedTransitions('entregado','domicilio'),[]);});

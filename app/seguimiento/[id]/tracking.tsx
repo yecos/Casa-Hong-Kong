@@ -1,0 +1,10 @@
+'use client';
+import { useState,useEffect,useCallback } from 'react';
+import { statusLabels,type OrderStatus } from '../../../lib/order-domain';
+type State={reference:string;status:OrderStatus;total:number;created_at:string;updated_at:string;method:string};
+export default function Tracking({id,token}:{id:string;token:string}){
+ const [data,setData]=useState<State|null>(null);const [error,setError]=useState('');const [busy,setBusy]=useState(false);
+ const load=useCallback(async()=>{setBusy(true);try{const r=await fetch(`/api/solicitudes?id=${encodeURIComponent(id)}&token=${encodeURIComponent(token)}`,{cache:'no-store'});const value=await r.json();if(!r.ok)throw new Error(value.error);setData(value);setError('');}catch(e){setError(e instanceof Error?e.message:'No pudimos consultar el estado.');}finally{setBusy(false);}},[id,token]);
+ useEffect(()=>{load();const interval=setInterval(()=>{if(document.visibilityState==='visible')load();},30000);return()=>clearInterval(interval);},[load]);
+ return <div className="tracking-card"><p role="alert" className="form-error">{error}</p>{data?<><p className="eyebrow">{data.reference}</p><h2>{statusLabels[data.status]}</h2><p>{data.status==='pendiente'?'Tu solicitud está registrada en la web. Envía el mensaje por WhatsApp y espera que la sede confirme disponibilidad, total y entrega.':'Estado actualizado por la sede. Para cambios o consultas, usa el chat del pedido.'}</p><dl><dt>Modalidad</dt><dd>{data.method==='domicilio'?'Domicilio':'Recogida'}</dd><dt>Total estimado</dt><dd>{new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(data.total)}</dd><dt>Última actualización</dt><dd>{new Date(data.updated_at).toLocaleString('es-CO',{timeZone:'America/Bogota'})}</dd></dl></>:!error&&<p>Cargando solicitud…</p>}<button type="button" className="button" disabled={busy} onClick={load}>{busy?'Consultando…':'Actualizar estado ↻'}</button><p className="data-note">Enlace privado: evita compartirlo. Esta página no muestra tu nombre, dirección ni teléfono.</p></div>;
+}

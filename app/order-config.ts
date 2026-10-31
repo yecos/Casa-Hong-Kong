@@ -6,11 +6,11 @@ export const deliveryRules = {
   referenceHours: '11 a. m. a 9 p. m.',
   whatsapp: '573004585451',
 };
-export function quoteTotals(subtotal: number, delivery: boolean) {
+export function quoteTotals(subtotal: number, delivery: boolean, rules = deliveryRules) {
   return {
-    deliveryFee: delivery ? deliveryRules.estimatedFee : 0,
-    estimatedTotal: subtotal + (delivery ? deliveryRules.estimatedFee : 0),
-    meetsMinimum: !delivery || subtotal >= deliveryRules.minimumSubtotal,
+    deliveryFee: delivery ? rules.estimatedFee : 0,
+    estimatedTotal: subtotal + (delivery ? rules.estimatedFee : 0),
+    meetsMinimum: !delivery || subtotal >= rules.minimumSubtotal,
   };
 }
 export function whatsappLink(message: string) {
