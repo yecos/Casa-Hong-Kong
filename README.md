@@ -70,3 +70,7 @@ Proyecto de Vercel existente: `hong-kong-medellin`, URL https://hong-kong-medell
 Se incorporaron seis platos de Casa Hong Kong transcritos y verificados visualmente contra el PDF aportado: Arroz Especial, Arroz Oriental, Arroz 8 Sabores, Chop suey Especial, Pollo en salsa agridulce y 2 Lumpias. Los tamaños tienen sus precios individuales; Arroz 8 Sabores comienza en Mediano, sin inventar un precio Mini. Vigencia y disponibilidad pendientes de confirmar. La carta no se aplica a Restaurante Hong Kong.
 
 Imágenes generadas con la herramienta integrada image_gen, optimizadas a WebP en `public/images/dishes/`. Son ilustrativas, no fotografías del restaurante ni garantía de ingredientes, cantidad o presentación. Los prompts se conservan en `image-prompts.md`.
+
+### Inicio y contacto
+
+El hero y los destacados usan las imágenes generadas guardadas en el proyecto. Los destacados enlazan a la carta; se añadieron preguntas frecuentes accesibles con details/summary y una navegación fija en móvil. Contacto de Casa Hong Kong actualizado desde el PDF: Carrera 80 #52-60 y WhatsApp 300 4585451. El enlace abre una consulta, sin enviar automáticamente el borrador. Vigencia por confirmar con el restaurante.
