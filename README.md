@@ -52,3 +52,7 @@ Nueva sección `#pedidos`, implementada en `app/orders.tsx`: elección de sede, 
 Los productos y precios son datos de demostración explícitos. No hay envío real, cobro, recogida de datos personales, recepción de pedidos ni panel de administración. Para habilitar operación real hacen falta carta y disponibilidad por sede, precios, cobertura/tarifa de entrega, horarios y un canal de pedidos validado. El resumen descargado se identifica como borrador no enviado.
 
 Verificación de esta sección: TypeScript correcto, compilación de producción con `npx next build --webpack` y prueba en navegador de agregar producto, aumentar cantidad, cambiar sede, elegir domicilio y revisar subtotal/resumen. Turbopack encontró una restricción del entorno al abrir un puerto interno; Webpack compiló correctamente.
+
+### Datos del borrador
+
+El flujo ahora exige nombre y celular colombiano (10 dígitos comenzando por 3). Al elegir domicilio también exige dirección y barrio. La validación nativa del navegador impide revisar formularios incompletos; los cambios invalidan el resumen anterior. El resumen incluye los datos ingresados y ofrece volver a editarlos. Usar datos ficticios al probar: los datos quedan en memoria de la pestaña y se incluyen en el TXT descargado, sin enviarse al restaurante ni guardarse en el servidor.
