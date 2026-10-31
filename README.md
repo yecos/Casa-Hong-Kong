@@ -64,3 +64,9 @@ Cada sede conserva su carrito independiente durante la sesión. Cambiar de resta
 ## Publicación de revisión
 
 Proyecto de Vercel existente: `hong-kong-medellin`, URL https://hong-kong-medellin.vercel.app. El repositorio activo para los siguientes despliegues es `yecos/Casa-Hong-Kong`, rama `main`. La conexión anterior al repositorio `hong-kong-medellin` se reemplazó porque Vercel indicaba `Project Link not found`.
+
+## Carta e imágenes ilustrativas
+
+Se incorporaron seis platos de Casa Hong Kong transcritos y verificados visualmente contra el PDF aportado: Arroz Especial, Arroz Oriental, Arroz 8 Sabores, Chop suey Especial, Pollo en salsa agridulce y 2 Lumpias. Los tamaños tienen sus precios individuales; Arroz 8 Sabores comienza en Mediano, sin inventar un precio Mini. Vigencia y disponibilidad pendientes de confirmar. La carta no se aplica a Restaurante Hong Kong.
+
+Imágenes generadas con la herramienta integrada image_gen, optimizadas a WebP en `public/images/dishes/`. Son ilustrativas, no fotografías del restaurante ni garantía de ingredientes, cantidad o presentación. Los prompts se conservan en `image-prompts.md`.
