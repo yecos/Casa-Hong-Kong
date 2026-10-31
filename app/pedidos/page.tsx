@@ -4,7 +4,7 @@ import Orders from '../orders';
 
 export const metadata: Metadata = {
   title: 'Prepara tu pedido | Casa Hong Kong y Restaurante Hong Kong',
-  description: 'Elige una sede, explora la carta con imágenes, selecciona tamaños y prepara tu borrador de pedido.',
+  description: 'Elige una sede, explora la carta con imágenes, selecciona tamaños y prepara tu solicitud por WhatsApp.',
 };
 
 export default function OrderPage() {
@@ -15,6 +15,6 @@ export default function OrderPage() {
       <Link className="text-link" href="/">← Volver a la página</Link>
     </header>
     <main id="pedido-app"><div className="ordering-intro"><p className="eyebrow">TU MESA, A TU MANERA</p><h1>Un antojo.<br/><em>Muchas posibilidades.</em></h1><p>Elige tu restaurante y arma tu selección a tu ritmo.</p><nav aria-label="Pasos del pedido"><a href="#pedidos">01 · Carta y sede</a><a href="#cart-title">02 · Tu carrito</a><a href="#customer-name">03 · Datos y resumen</a></nav></div><Orders standalone/></main>
-    <footer className="ordering-footer"><Link href="/">← Conoce nuestros restaurantes</Link><p>Borradores de demostración · No se reciben pedidos ni pagos.</p></footer>
+    <footer className="ordering-footer"><Link href="/">← Conoce nuestros restaurantes</Link><p>Solicitudes por WhatsApp · El restaurante confirma tu pedido.</p><Link href="/privacidad">Uso de tus datos</Link></footer>
   </div>;
 }

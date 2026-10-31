@@ -1,80 +1,63 @@
-# Casa Hong Kong y Restaurante Hong Kong
+# Hong Kong Medellín
 
-Web local en Next.js 16 (App Router), React 19, TypeScript y Tailwind CSS 4. Sin publicación ni servicios externos de pedidos. Las imágenes están guardadas en el proyecto.
+Web de Casa Hong Kong y Restaurante Hong Kong, con app independiente de solicitudes de pedido por WhatsApp. Next.js 16, React 19, TypeScript y Tailwind 4.
 
-## Ejecutar
+## Ejecutar y verificar
 
-Requiere Node.js 20.9 o superior.
+Node.js 22.18+ o 24 recomendado (tests usan TypeScript nativo).
 
 ```sh
 npm ci
 npm run dev
+npm run typecheck
+npm run build -- --webpack
+node --test tests/order.test.mjs
 ```
 
-Abrir http://localhost:3000. Para producción local: `npm run build` y `npm start`. Verificar tipos: `npm run typecheck`.
+Abrir http://localhost:3000. Producción local: `npm start` después de compilar.
 
-## Contenido y fuentes
+## Rutas
 
-Se recuperaron las dos capturas adjuntas del chat «Diseño web gastronómico». El mockup generado no estuvo disponible; la composición interpreta el estilo Herencia oriental solicitado.
+- `/`: presentación de las sedes, destacados y contactos.
+- `/pedidos`: catálogo, tamaños, carrito por sede, recogida/domicilio, datos, revisión y solicitud por WhatsApp.
+- `/privacidad`: explicación del tratamiento del formulario y el enlace externo.
 
-- Casa Hong Kong: captura con dirección Av. 80 #5260, normalizada visualmente como Av. 80 #52-60. Teléfono transcrito: 44212138. Tiene ocho dígitos; NO se normaliza ni se habilita para llamar hasta confirmarlo.
-- Restaurante Hong Kong: Av. 80 #48-75. Teléfono 304 3450995; enlace de llamada +573043450995.
-- Direcciones y contactos proceden de las capturas y deben reconfirmarse. No se usan estados de apertura, calificaciones ni horarios de las capturas como datos vigentes.
-- Relación familiar y ciudad: información aportada por el usuario. No se añadieron fechas, fundadores ni hechos históricos.
-- Carta, precios, ingredientes, cobertura, horarios y WhatsApp: pendientes de confirmar. El área de platos es una selección ilustrativa claramente marcada.
-- Foto gastronómica de referencia: https://images.unsplash.com/photo-1512058564366-18510be2db19. No representa un plato real de los restaurantes. Sustituir con fotografía autorizada del negocio antes del lanzamiento.
+## Flujo disponible
 
-## Funcionalidad
+Casa Hong Kong: 25 entradas de carta (platos principales, variantes cerdo/jamón separadas y promoción de 2 lumpias), tamaños/precios del PDF aportado. Las promociones combinadas de cajas/pollo/bebida del PDF no están incorporadas a la selección. El cliente elige productos, completa sus datos, revisa el total estimado y decide compartirlos con el WhatsApp +57 300 4585451. El enlace abre el chat con el mensaje preparado: el cliente debe enviarlo y acordar disponibilidad, total, forma de pago y entrega con la sede. La web no marca el pedido como aceptado ni procesa pagos.
 
-Navegación por secciones, enlaces individuales de ubicación en Google Maps, contacto por sede y llamada para el móvil confirmado en la captura. Casa Hong Kong conserva contacto informativo sin enlace de llamada por su numeración ambigua. Sin formulario ficticio ni pedidos simulados.
+Restaurante Hong Kong: no tiene catálogo ni canal de WhatsApp confirmados. Se muestra contacto de llamada 304 3450995, sin productos ficticios ni envío al canal de otra sede.
 
-## Accesibilidad y SEO
+## Reglas iniciales de domicilio
 
-HTML semántico, idioma español, enlace para saltar al contenido, títulos jerárquicos, textos alternativos, foco visible y reducción de movimiento. Diseño adaptable a móvil y escritorio. Metadata de título, descripción y Open Graph. `robots` está en noindex/nofollow para esta propuesta; al publicar, configurar dominio, canonical, sitemap, imágenes sociales e indexación. No se inventa dominio de producción.
+Definidas a petición del usuario como propuesta inicial. Editar `app/order-config.ts`:
 
-## Verificación
+- Barrios: Calasanz, Los Colores, Estadio, La Floresta y Laureles.
+- Tarifa estimada: $6.000 COP.
+- Mínimo en productos: $25.000 COP (el domicilio no cuenta para alcanzarlo).
+- Horario de referencia: 11 a. m. a 9 p. m., sin garantía de apertura. El chat confirma atención.
+- Otro barrio puede solicitar validación; no se garantiza cobertura.
 
-Compilación de producción y revisión de tipos realizadas. Vista de escritorio inspeccionada en navegador local. La vista móvil tiene reglas responsive, pero no fue comprobada con emulación de dispositivo en esta sesión.
+La interfaz y el mensaje aclaran que cobertura según dirección, precios vigentes, tarifa final, horario y entrega deben confirmarse con la sede. Estas reglas no se presentan como verificadas por el restaurante. No se cobra un pago anticipado basado en una estimación.
 
-## Archivos principales
+## Contenido y recursos
 
-- app/page.tsx: contenido, sedes y enlaces.
-- app/globals.css: estilo y reglas responsive.
-- app/layout.tsx: idioma y metadata.
-- public/images/rice.jpg: foto local.
+Carta de Casa Hong Kong y WhatsApp transcritos del PDF “Restaurante Chino.pdf” aportado por el usuario. Dirección: Carrera 80 #52-60, Medellín. Otra sede: Av. 80 #48-75 según capturas. Vigencia pendiente de confirmar. No se añadieron fechas ni hechos históricos. Se preservan los nombres por separado.
 
-No se ha publicado.
+Seis imágenes generadas con image_gen, guardadas en `public/images/dishes/`, marcadas como ilustrativas. Los prompts están en `image-prompts.md`. Otros platos se presentan sin asignarles una fotografía que no les corresponde. La fotografía original de referencia en `public/images/rice.jpg` se conserva, pero ya no se usa en el inicio.
 
-## Sección de pedidos
+## Datos y operación
 
-Nueva sección `#pedidos`, implementada en `app/orders.tsx`: elección de sede, filtros por categoría, carrito con cantidades limitadas a 20 por producto, eliminación de productos, subtotal COP, recogida o domicilio, observaciones y descarga de resumen TXT. Estado temporal en memoria; no se conserva al recargar. El cambio de sede mantiene la selección de ejemplo y se indica en pantalla.
+Carrito y datos solo en memoria del navegador; no persisten al recargar. No se guardan en base de datos ni en almacenamiento local. Al abrir WhatsApp, el servicio recibe los datos incluidos en su URL, con autorización explícita del cliente en la pantalla de revisión. El TXT descargado contiene esos mismos datos. No hay panel de administración, cuentas, pagos ni seguimiento automático: la operación se gestiona en el chat y la carta/configuración se actualizan en el repositorio.
 
-Los productos y precios son datos de demostración explícitos. No hay envío real, cobro, recogida de datos personales, recepción de pedidos ni panel de administración. Para habilitar operación real hacen falta carta y disponibilidad por sede, precios, cobertura/tarifa de entrega, horarios y un canal de pedidos validado. El resumen descargado se identifica como borrador no enviado.
+Metadatos, idioma español, accesos de teclado, foco visible, texto alternativo y movimiento reducido. Indexación desactivada mientras se validan datos del negocio.
 
-Verificación de esta sección: TypeScript correcto, compilación de producción con `npx next build --webpack` y prueba en navegador de agregar producto, aumentar cantidad, cambiar sede, elegir domicilio y revisar subtotal/resumen. Turbopack encontró una restricción del entorno al abrir un puerto interno; Webpack compiló correctamente.
+## Publicación
 
-### Datos del borrador
+Repositorio activo: https://github.com/yecos/Casa-Hong-Kong, rama main.
 
-El flujo ahora exige nombre y celular colombiano (10 dígitos comenzando por 3). Al elegir domicilio también exige dirección y barrio. La validación nativa del navegador impide revisar formularios incompletos; los cambios invalidan el resumen anterior. El resumen incluye los datos ingresados y ofrece volver a editarlos. Usar datos ficticios al probar: los datos quedan en memoria de la pestaña y se incluyen en el TXT descargado, sin enviarse al restaurante ni guardarse en el servidor.
+Proyecto existente de Vercel: hong-kong-medellin. URL: https://hong-kong-medellin.vercel.app. El push a main dispara el despliegue. `vercel.json` usa Next.js con Webpack.
 
-### Carritos por sede y búsqueda
+## Verificación del flujo
 
-Cada sede conserva su carrito independiente durante la sesión. Cambiar de restaurante ya no traslada productos al otro carrito. Se añadió búsqueda por nombre combinada con categorías, resultados vacíos con recuperación y vaciado del carrito de la sede activa. Los datos del cliente permanecen en memoria y no se transmiten.
-
-## Publicación de revisión
-
-Proyecto de Vercel existente: `hong-kong-medellin`, URL https://hong-kong-medellin.vercel.app. El repositorio activo para los siguientes despliegues es `yecos/Casa-Hong-Kong`, rama `main`. La conexión anterior al repositorio `hong-kong-medellin` se reemplazó porque Vercel indicaba `Project Link not found`.
-
-## Carta e imágenes ilustrativas
-
-Se incorporaron seis platos de Casa Hong Kong transcritos y verificados visualmente contra el PDF aportado: Arroz Especial, Arroz Oriental, Arroz 8 Sabores, Chop suey Especial, Pollo en salsa agridulce y 2 Lumpias. Los tamaños tienen sus precios individuales; Arroz 8 Sabores comienza en Mediano, sin inventar un precio Mini. Vigencia y disponibilidad pendientes de confirmar. La carta no se aplica a Restaurante Hong Kong.
-
-Imágenes generadas con la herramienta integrada image_gen, optimizadas a WebP en `public/images/dishes/`. Son ilustrativas, no fotografías del restaurante ni garantía de ingredientes, cantidad o presentación. Los prompts se conservan en `image-prompts.md`.
-
-### Inicio y contacto
-
-El hero y los destacados usan las imágenes generadas guardadas en el proyecto. Los destacados enlazan a la carta; se añadieron preguntas frecuentes accesibles con details/summary y una navegación fija en móvil. Contacto de Casa Hong Kong actualizado desde el PDF: Carrera 80 #52-60 y WhatsApp 300 4585451. El enlace abre una consulta, sin enviar automáticamente el borrador. Vigencia por confirmar con el restaurante.
-
-## App independiente de pedidos
-
-La app vive en `/pedidos`, con metadata propia, navegación de retorno al inicio, accesos a carta/carrito/datos y una barra de carrito móvil con cantidad y subtotal. El inicio conserva un bloque de acceso en `#pedidos` para enlaces anteriores; sus CTA ahora abren `/pedidos`. La carta y el estado del carrito se renderizan únicamente en la página de pedidos. No se ha habilitado envío ni pagos.
+Pruebas de tarifa/mínimo/recogida y codificación del enlace de WhatsApp. Compilación y TypeScript. Prueba de navegador con datos ficticios: agregar arroz Mini ($25.000), domicilio en Calasanz, estimado $31.000, revisión, botón de WhatsApp desactivado sin autorización y activado después de marcarla. No se envió ningún pedido de prueba ni se abrió WhatsApp con datos de clientes.
