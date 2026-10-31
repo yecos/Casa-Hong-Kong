@@ -60,3 +60,7 @@ El flujo ahora exige nombre y celular colombiano (10 dígitos comenzando por 3).
 ### Carritos por sede y búsqueda
 
 Cada sede conserva su carrito independiente durante la sesión. Cambiar de restaurante ya no traslada productos al otro carrito. Se añadió búsqueda por nombre combinada con categorías, resultados vacíos con recuperación y vaciado del carrito de la sede activa. Los datos del cliente permanecen en memoria y no se transmiten.
+
+## Publicación de revisión
+
+Proyecto de Vercel existente: `hong-kong-medellin`, URL https://hong-kong-medellin.vercel.app. El repositorio activo para los siguientes despliegues es `yecos/Casa-Hong-Kong`, rama `main`. La conexión anterior al repositorio `hong-kong-medellin` se reemplazó porque Vercel indicaba `Project Link not found`.
