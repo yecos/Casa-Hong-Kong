@@ -74,3 +74,7 @@ Imágenes generadas con la herramienta integrada image_gen, optimizadas a WebP e
 ### Inicio y contacto
 
 El hero y los destacados usan las imágenes generadas guardadas en el proyecto. Los destacados enlazan a la carta; se añadieron preguntas frecuentes accesibles con details/summary y una navegación fija en móvil. Contacto de Casa Hong Kong actualizado desde el PDF: Carrera 80 #52-60 y WhatsApp 300 4585451. El enlace abre una consulta, sin enviar automáticamente el borrador. Vigencia por confirmar con el restaurante.
+
+## App independiente de pedidos
+
+La app vive en `/pedidos`, con metadata propia, navegación de retorno al inicio, accesos a carta/carrito/datos y una barra de carrito móvil con cantidad y subtotal. El inicio conserva un bloque de acceso en `#pedidos` para enlaces anteriores; sus CTA ahora abren `/pedidos`. La carta y el estado del carrito se renderizan únicamente en la página de pedidos. No se ha habilitado envío ni pagos.
